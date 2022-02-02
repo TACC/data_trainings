@@ -4,7 +4,7 @@
 
 1. Install R version 4.1.2
 
-2. Optional: Install R studio
+2. Install R studio
 
 3. Install Rtools
 
