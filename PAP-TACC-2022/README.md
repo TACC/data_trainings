@@ -2,11 +2,9 @@
 
 ## Environment Setup (Windows)
 
-1. Install R version 4.1.2
+1. Install or upgrade to R version 4.1.2
 
-2. Install R studio
-
-3. Install Rtools
+2. Install Rtools
 
 4. Add Rtools to the system search path by running the following in an R console:
 
