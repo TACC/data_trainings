@@ -1,5 +1,5 @@
 ---
-title: "R Basics Exercises"
+title: "R Basics"
 output:
   pdf_document:
     toc: yes
@@ -10,6 +10,10 @@ output:
     toc_depth: 6
     toc_float: yes
 ---
+
+```{r knit, include=FALSE}
+library(knitr)
+```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -196,6 +200,73 @@ The help documentation has several sections of which these are typically the mos
 5. "Value" describes the value the function returns.
 6. "Examples" shows usage examples in more detail.
 
+# Flow control
+
+Flow control helps you move data through your script with looping and conditional statements. 
+
+## Loops
+
+### For-loops
+
+For-loops allow you to perform actions (like evaluate functions) on iterable variables (like vectors) one element at a time. For-loops terminate when all elements in the iterable have been acted on:
+
+```{r}
+for(i in 1:10){
+  print(i*i)
+}
+```
+
+### While-loops
+
+While-loops also work on iterables, but have terminate when a pre-specified condition is met.
+
+```{r}
+i <- 1
+while(i < 6){
+  print(i)
+  i <- i + 1
+}
+```
+
+If you don't select a suitable termination condition, your while-loop could continue indefinitely. For example, this code would loop infinitely:
+
+```{r eval=FALSE}
+j <- 1
+while(j < 6){
+  print(j)
+  j <- j - 1
+}
+```
+
+## If/Else conditionals
+
+If/Else statements are used to evaluate mutually exclusive conditions:
+
+```{r}
+bigger_than_breadbox <- FALSE
+if(bigger_than_breadbox == TRUE){
+  print('The item bigger than breadbox')
+}else{
+  print('The item is not bigger than a breadbox')
+}
+```
+
+If/Else statements can be extended to more than two mutually exclusive conditions with an `else if` clause:
+
+```{r}
+object <- 'plastic'
+
+if(object == 'vegetable'){
+  print('Object is a vegetable')
+}else if(object == 'animal'){
+  print('Object is an animal')
+}else if(object == 'mineral'){
+  print('Object is a mineral!')
+}else{
+  print('Object must be something else.')
+}
+```
+
 # Basic data structure
 
 ## Vectors
@@ -270,12 +341,12 @@ We will load the `tidyverse` package, which contains the `tibble` package and se
 library('tidyverse')
 ```
 
-We will use one of the built-in example datasets to briefly demonstrate interaction with dataframes. We load the dataset with the `data()` function, and use the `tibble()` function to convert to a `tbl_df`. We will load the Motor Trend Car Road Tests, "mtcars".
+We will use one of the built-in example datasets to briefly demonstrate interaction with dataframes. We will load the Motor Trend Car Road Tests, "mtcars" with the `data()` function, convert the row names to a column with the `rownames_to_column()` function, and then convert the dataset to a `tbl_df` with the `tibble()` function:
 
 ```{r}
 data("mtcars")
+mtcars <- rownames_to_column(mtcars, var="car_name")
 mtcars <- tibble(mtcars)
-typeof(mtcars)
 ```
 
 The `head()` and `tail()` functions allow you to inspect the first several and last several rows of a dataframe, respectively:
@@ -302,14 +373,94 @@ We can count the number of columns with the `dim()` function, which returns the 
 dim(mtcars)
 ```
 
-We will discuss dataframes and data analysis more thoroughly in subsequent lessons.
+Because this is a built-in dataset, we can also inspect help documentation that tells us a bit more about the data:
 
-# Flow control
+```{r}
+?mtcars
+```
 
-## For-loops
+The "Format" section tells us the column interpretations:
 
-## Conditionals
+A data frame with 32 observations on 11 (numeric) variables.
 
-### If/Else
+  [, 1]	mpg	Miles/(US) gallon
+  [, 2]	cyl	Number of cylinders
+  [, 3]	disp	Displacement (cu.in.)
+  [, 4]	hp	Gross horsepower
+  [, 5]	drat	Rear axle ratio
+  [, 6]	wt	Weight (1000 lbs)
+  [, 7]	qsec	1/4 mile time
+  [, 8]	vs	Engine (0 = V-shaped, 1 = straight)
+  [, 9]	am	Transmission (0 = automatic, 1 = manual)
+  [,10]	gear	Number of forward gears
+  [,11]	carb	Number of carburetors
 
-### While
+### Selecting data
+
+You can select data by column with the `$` operator:
+
+```{r}
+mtcars$mpg
+```
+
+#### The %>% operator
+
+The `%>%` operator serves as a pipe, allowing you to build sequences of operations. You can read more about pipe operators [here](https://towardsdatascience.com/an-introduction-to-the-pipe-in-r-823090760d64).
+
+We can use the %>% operator and the `select()` function from the `dplyr` package (which was loaded as part of the `tidyverse` collection of packages) to select multiple columns at the same time:
+
+```{r}
+mtcars %>% dplyr::select(mpg, disp)
+```
+
+### Data summaries
+
+#### Summary statistics
+
+We can calculate the mean and standard deviation of individual columns in the `mtcars` dataset:
+
+```{r}
+print(mean(mtcars$mpg))
+print(sd(mtcars$mpg))
+```
+
+We can also calculate a summary for all the numeric (non-categorical) values in the dataset. The `summary()` function returns the minimum, 25th percentile (1st quartile), median, mean, 75th percentile (3rd quartile), and maximum values. 
+
+```{r}
+numeric_mtcars <- mtcars %>% dplyr::select(car_name, mpg, disp, hp, drat, wt, qsec)
+summary(numeric_mtcars)
+```
+
+#### Summary plots
+
+The `pairs()` function shows generates a scatterplot matrix for all pairwise combinations of columnar variables in a dataset. The diagonal panel indicates the column name and the (x, y) axis coordinate labels. We use the `%>%` operator to drop out the `car_name` column and pass only the truly numeric data to the `pairs()` function.
+
+```{r}
+numeric_mtcars %>% dplyr::select(-car_name) %>% pairs(pch=19)
+```
+
+Histograms provide summaries of the distribution of data. We can use the `ggplot2` library, also part of the `tidyverse`, to generate histograms for the numeric data. Because there are only 32 observations in the `mtcars` dataset, we use only 10 bins in our histogram.
+
+```{r}
+ggplot(data=mtcars, aes(x=mpg)) + geom_histogram(bins=10)
+```
+
+### Reshaping data
+
+Datasets can be broadly categorized as having either "long" or "wide" form. The `mtcars` dataset is "wide" form data: each row is an observation, and each column represents a different measured variable. In contrast, "long" form data includes a single column for "variable type" and many more rows. Wide form data are useful when you need to select single variable types and work with them independently, and for certain types of aggregations. Long form data are useful when you want to do certain types of data joins or merges, and are sometimes required for plotting functions.
+
+The `pivot_longer()` and `pivot_wider()` functions allow you to reshape data as needed.
+
+```{r}
+numeric_mtcars_long <- numeric_mtcars %>% 
+  pivot_longer(!car_name, names_to="variable", values_to="value")
+head(numeric_mtcars_long)
+```
+
+With our long format data, we can easily create a series of histograms with `ggplot`. We use the `scales="free"` argument to allow each panel to have its own x-axis range.
+
+```{r}
+ggplot(data=numeric_mtcars_long, aes(value)) + 
+  geom_histogram(bins=10) + 
+  facet_wrap(~variable, scales="free")
+```
