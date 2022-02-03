@@ -2,11 +2,9 @@
 
 ## Environment Setup (Windows)
 
-1. Install R version 4.1.2
+1. Install or upgrade to R version 4.1.2
 
-2. Optional: Install R studio
-
-3. Install Rtools
+2. Install Rtools
 
 4. Add Rtools to the system search path by running the following in an R console:
 
@@ -14,11 +12,13 @@
 
 5. Test Rtools installation in an R console:
 
-        sys.which("make") # should output path to the Rtools executable if Rtools is correctly installed and added to PATH
+        sys.which("make")
+
+   This command should output path to the Rtools executable if Rtools is correctly installed and added to PATH.
 
 6. Restore the project environment with the following commands in an R console:
 
         install.packages("renv")
         library(renv)
-        setwd("~/predict-align-prevent-main")
+        setwd("~/data_trainings/PAP-TACC-2022")
         renv::restore()
