@@ -61,6 +61,13 @@ log10(10)
 log2(10)
 ```
 
+The modulo operator performs a division operation and returns the remainder. This can be helpful for identifying even vs odd numbers, or identifying factors of an integer value.
+
+```{r}
+print(10 %% 10)
+print(10 %% 6)
+print(10 %% 3)
+```
 ## Logical operators
 
 Logical operators are used for value and/or variable comparisons.
@@ -177,6 +184,13 @@ The `seq()` function makes a sequence. Its arguments are start, stop, and step.
 ```{r}
 my_sequence <- seq(30, 20, -1)
 print(my_sequence)
+```
+
+The `length()` function returns the length of a vector:
+
+```{r}
+print(length(my_vector))
+print(length(my_sequence))
 ```
 
 # Getting help with functions
@@ -383,17 +397,17 @@ The "Format" section tells us the column interpretations:
 
 A data frame with 32 observations on 11 (numeric) variables.
 
-  [, 1]	mpg	Miles/(US) gallon
-  [, 2]	cyl	Number of cylinders
-  [, 3]	disp	Displacement (cu.in.)
-  [, 4]	hp	Gross horsepower
-  [, 5]	drat	Rear axle ratio
-  [, 6]	wt	Weight (1000 lbs)
-  [, 7]	qsec	1/4 mile time
-  [, 8]	vs	Engine (0 = V-shaped, 1 = straight)
-  [, 9]	am	Transmission (0 = automatic, 1 = manual)
-  [,10]	gear	Number of forward gears
-  [,11]	carb	Number of carburetors
+    [, 1]	mpg	Miles/(US) gallon
+    [, 2]	cyl	Number of cylinders
+    [, 3]	disp	Displacement (cu.in.)
+    [, 4]	hp	Gross horsepower
+    [, 5]	drat	Rear axle ratio
+    [, 6]	wt	Weight (1000 lbs)
+    [, 7]	qsec	1/4 mile time
+    [, 8]	vs	Engine (0 = V-shaped, 1 = straight)
+    [, 9]	am	Transmission (0 = automatic, 1 = manual)
+    [,10]	gear	Number of forward gears
+    [,11]	carb	Number of carburetors
 
 ### Selecting data
 
