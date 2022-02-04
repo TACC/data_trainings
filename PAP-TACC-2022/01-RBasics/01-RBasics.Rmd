@@ -1,5 +1,8 @@
 ---
 title: "R Basics"
+subtitle: "Prepared for PAP New Jersey Trainings"
+date: "February 3, 2022"
+author: Kelly Pierce, Texas Advanced Computing Center
 output:
   pdf_document:
     toc: yes
